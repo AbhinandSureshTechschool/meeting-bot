@@ -39,7 +39,7 @@ services:
       # back to the in-container browser. See README.md (Usage → Join a Google Meet).
       - GOOGLE_CHROME_CDP_URL=${GOOGLE_CHROME_CDP_URL-http://chrome-cdp:9223}
     ports:
-      - "3000:3000"
+      - "3008:3000"
     volumes:
       - .:/usr/src/app
       - ./.chrome:/usr/src/app/.chrome
