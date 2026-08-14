@@ -634,7 +634,11 @@ class DiskUploader implements IUploader {
     const chunkSize = this.UPLOAD_CHUNK_SIZE;
 
     // Compose key to preserve existing S3 layout for parity
-    const fileName = fileNameTemplate(this._namePrefix, getTimeString(this._timezone, this._logger));
+    
+    const time = getTimeString(this._timezone, this._logger);
+    const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
+
+    const fileName = fileNameTemplate(this._namePrefix, `${time}-${uniqueId}`);
     const key = `meeting-bot/${this._userId}/${fileName}${this.fileExtension}`;
 
     // Validate provider configuration before attempting upload
