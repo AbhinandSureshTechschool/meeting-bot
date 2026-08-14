@@ -47,7 +47,8 @@ const joinGoogleMeet = async (req: Request, res: Response) => {
     const jobResult = await globalJobStore.addJob(async () => {
       // Initialize disk uploader
       const entityId = botId ?? eventId;
-      const tempId = `${userId}${entityId}0`; // Using 0 as retry count
+      const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
+      const tempId = `${userId}${entityId}-${uniqueId}`;
       const tempFileId = encodeFileNameSafebase64(tempId);
       const namePrefix = getRecordingNamePrefix('google');
 

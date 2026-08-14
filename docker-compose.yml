@@ -6,7 +6,7 @@ services:
     #   REDIS_PORT_HOST=6380 docker compose up
     # The bot itself always reaches Redis over the compose network as `redis:6379`.
     ports:
-      - "${REDIS_PORT_HOST:-6379}:6379"
+      - "${REDIS_PORT_HOST:-6380}:6379"
     command: ["redis-server", "--save", "", "--appendonly", "no"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]

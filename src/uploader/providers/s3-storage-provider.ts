@@ -65,8 +65,10 @@ export class S3StorageProvider implements StorageProvider {
       options.logger.info(`Upload of ${options.key} complete.`);
       return true;
     } catch (err) {
-      options.logger.error(`Upload for ${options.key} failed.`, err);
-      return false;
+      options.logger.error(`Upload for ${options.key} failed: ${
+      err instanceof Error ? err.stack || err.message : JSON.stringify(err)
+    }`);
+      throw err;
     }
   }
 }
