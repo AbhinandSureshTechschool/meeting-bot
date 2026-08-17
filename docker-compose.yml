@@ -67,6 +67,18 @@ services:
     shm_size: "1gb"
     expose:
       - "9223"
+    minio:
+      image: minio/minio:latest
+      container_name: meeting-bot-minio
+      restart: unless-stopped
+      env_file:
+        - .env
+      command: server /data --console-address ":9001"
+      volumes:
+        - /home/abhinand/meeting-bot-minio/data:/data
+      ports:
+        - "9001:9000"
+        - "9002:9001"  
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://127.0.0.1:9223/json/version"]
       interval: 5s
