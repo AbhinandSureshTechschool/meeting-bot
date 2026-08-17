@@ -52,6 +52,8 @@ services:
         condition: service_healthy
       chrome-cdp:
         condition: service_healthy
+      minio:
+        condition: service_started
 
   # Real Google Chrome + Xvfb exposed over the Chrome DevTools Protocol, used by
   # the Google Meet bot via GOOGLE_CHROME_CDP_URL. Port 9223 is an nginx proxy
