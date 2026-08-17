@@ -125,7 +125,7 @@ async function launchPersistentContextWithTimeout(launchFn: () => Promise<Browse
 }
 
 async function createBrowserContext(url: string, correlationId: string, botType: BotType = 'google'): Promise<Page> {
-  const size = { width: 1280, height: 720 };
+  const size = { width: 1920, height: 1080 };
   const browserWindowSize = { width: size.width, height: size.height + 80 };
 
   // Google Meet is sensitive to browser fingerprinting before admission. Keep

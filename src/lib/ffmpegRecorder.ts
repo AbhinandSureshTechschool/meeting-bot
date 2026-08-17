@@ -66,10 +66,10 @@ export class FFmpegRecorder {
 
           // Video input from X11 display (with Y offset to skip address bar)
           '-f', 'x11grab',
-          '-video_size', '1280x720',
+          '-video_size', '1920x1080',
           '-framerate', '25',
           '-draw_mouse', '0',
-          '-i', `${process.env.DISPLAY || ':99'}+0,80`,  // +0,80 = X offset 0, Y offset 80 (skip address bar)
+          '-i', `${process.env.DISPLAY || ':99'}+0,20`,  // +0,80 = X offset 0, Y offset 80 (skip address bar)
 
           // Audio input from PulseAudio monitor
           '-f', 'pulse',

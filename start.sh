@@ -72,4 +72,4 @@ else
     ps aux | grep pulse
 fi
 
-xvfb-run --server-num=99 --server-args='-screen 0 1280x800x24' npm run start
+xvfb-run --server-num=99 --server-args='-screen 0 1920x1120x24' npm run start
