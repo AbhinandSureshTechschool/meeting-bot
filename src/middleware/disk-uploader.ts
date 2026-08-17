@@ -62,6 +62,8 @@ class DiskUploader implements IUploader {
   private _botId: string;
   private _namePrefix: string;
   private _tempFileId: string;
+  private _branchName?: string;
+  private _batchName?: string;
   private _logger: Logger;
   private _meetingLink?: string;
 
@@ -98,7 +100,10 @@ class DiskUploader implements IUploader {
     namePrefix: string,
     tempFileId: string,
     logger: Logger,
-    meetingLink?: string
+    meetingLink?: string,
+    branchName?: string,
+    batchName?: string
+
   ) {
     this._token = token;
     this._teamId = teamId;
@@ -109,6 +114,8 @@ class DiskUploader implements IUploader {
     this._tempFileId = tempFileId;
     this._logger = logger;
     this._meetingLink = meetingLink;
+    this._branchName = branchName;
+    this._batchName = batchName;
 
     this.queue = [];
     this.writing = false;
@@ -125,7 +132,9 @@ class DiskUploader implements IUploader {
     namePrefix: string,
     tempFileId: string,
     logger: Logger,
-    meetingLink?: string
+    url: string,
+    branchName?: string,
+    batchName?: string,
   ) {
     const folderPath = DiskUploader.getFolderPath(userId);
 
@@ -140,7 +149,9 @@ class DiskUploader implements IUploader {
       namePrefix,
       tempFileId,
       logger,
-      meetingLink
+      url,
+      branchName,
+      batchName
     );
     return instance;
   }
@@ -207,7 +218,7 @@ class DiskUploader implements IUploader {
       const fileUrl = file.url || (file.defaultProfile && file.alternativeFormats?.[file.defaultProfile]?.url) || undefined;
       this.lastUploadedBlobUrl = fileUrl;
       if (file.recordingId) this.lastRecordingId = file.recordingId;
-    } catch {}
+    } catch { }
     try {
       // Capture URL/recordingId if available
       const fileUrl = file.url || (file.defaultProfile && file.alternativeFormats?.[file.defaultProfile]?.url) || undefined;
@@ -222,8 +233,8 @@ class DiskUploader implements IUploader {
           defaultProfile: file.defaultProfile,
           duration: this.recordingDuration ?? file.duration,
         };
-      } catch {}
-    } catch {}
+      } catch { }
+    } catch { }
   }
 
   private writeChunkToDisk(chunk: Buffer): Promise<void> {
@@ -318,7 +329,7 @@ class DiskUploader implements IUploader {
       }
       this.enqueue(data);
       return true;
-    } catch(err) {
+    } catch (err) {
       this._logger.info('Error: Unable to save the chunk to disk...', this._userId, this._teamId, err);
       return false;
     }
@@ -513,7 +524,7 @@ class DiskUploader implements IUploader {
     } catch (err) {
       try {
         await fs.promises.unlink(outputPath);
-      } catch {}
+      } catch { }
       throw err;
     }
   }
@@ -593,7 +604,7 @@ class DiskUploader implements IUploader {
       }
 
       return true;
-    } catch(err) {
+    } catch (err) {
       this._logger.info('Critical: Failed to finalise temp file write...', this._userId, err);
       return false;
     }
@@ -634,8 +645,15 @@ class DiskUploader implements IUploader {
     const chunkSize = this.UPLOAD_CHUNK_SIZE;
 
     // Compose key to preserve existing S3 layout for parity
-    const fileName = fileNameTemplate(this._namePrefix, getTimeString(this._timezone, this._logger));
-    const key = `meeting-bot/${this._userId}/${fileName}${this.fileExtension}`;
+
+    const time = getTimeString(this._timezone, this._logger);
+    const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
+
+    const fileName = fileNameTemplate(this._namePrefix, `${time}-${uniqueId}`);
+    const branchName = this._branchName || 'Unknown-Branch';
+    const batchName = this._batchName || 'Unknown-Batch';
+
+    const key = `${branchName}/${batchName}/${fileName}${this.fileExtension}`;
 
     // Validate provider configuration before attempting upload
     provider.validateConfig();
