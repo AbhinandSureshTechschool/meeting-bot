@@ -85,8 +85,8 @@ services:
     volumes:
       - /home/abhinand/meeting-bot-minio/data:/data
     ports:
-      - "9001:9000"
-      - "9002:9001"
+      - "9005:9000"
+      - "9006:9001"
 
 volumes:
   cache:
