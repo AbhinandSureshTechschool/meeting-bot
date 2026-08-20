@@ -64,6 +64,7 @@ class DiskUploader implements IUploader {
   private _tempFileId: string;
   private _branchName?: string;
   private _batchName?: string;
+  private _recordingFileName?: string;
   private _logger: Logger;
   private _meetingLink?: string;
 
@@ -102,7 +103,8 @@ class DiskUploader implements IUploader {
     logger: Logger,
     meetingLink?: string,
     branchName?: string,
-    batchName?: string
+    batchName?: string,
+    recordingFileName?: string
 
   ) {
     this._token = token;
@@ -116,6 +118,7 @@ class DiskUploader implements IUploader {
     this._meetingLink = meetingLink;
     this._branchName = branchName;
     this._batchName = batchName;
+    this._recordingFileName = recordingFileName;
 
     this.queue = [];
     this.writing = false;
@@ -135,6 +138,7 @@ class DiskUploader implements IUploader {
     url: string,
     branchName?: string,
     batchName?: string,
+    recordingFileName?: string
   ) {
     const folderPath = DiskUploader.getFolderPath(userId);
 
@@ -151,7 +155,8 @@ class DiskUploader implements IUploader {
       logger,
       url,
       branchName,
-      batchName
+      batchName,
+      recordingFileName
     );
     return instance;
   }
@@ -653,8 +658,9 @@ class DiskUploader implements IUploader {
     const fileName = fileNameTemplate(this._namePrefix, `${time}-${uniqueId}`);
     const branchName = this._branchName || 'Unknown-Branch';
     const batchName = this._batchName || 'Unknown-Batch';
+    const recordingFileName = this._recordingFileName || 'unKnown-Recording';
 
-    const key = `${branchName}/${batchName}/${fileName}${this.fileExtension}`;
+    const key = `${branchName}/${batchName}/${recordingFileName}`;
 
     // Validate provider configuration before attempting upload
     provider.validateConfig();

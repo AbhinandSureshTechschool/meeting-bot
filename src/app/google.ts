@@ -22,7 +22,8 @@ const joinGoogleMeet = async (req: Request, res: Response) => {
     eventId,
     botId,
     branchName,
-    batchName
+    batchName,
+    recordingFileName
   }: MeetingJoinParams = req.body;
 
   // Validate required fields
@@ -65,7 +66,8 @@ const joinGoogleMeet = async (req: Request, res: Response) => {
         logger,
         url,
         branchName,
-        batchName
+        batchName,
+        recordingFileName
       );
 
       // Create and join the meeting
