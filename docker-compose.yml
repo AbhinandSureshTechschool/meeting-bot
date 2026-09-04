@@ -6,7 +6,7 @@ services:
     #   REDIS_PORT_HOST=6380 docker compose up
     # The bot itself always reaches Redis over the compose network as `redis:6379`.
     ports:
-      - "${REDIS_PORT_HOST:-6380}:6379"
+      - "${REDIS_PORT_HOST:-6381}:6379"
     command: ["redis-server", "--save", "", "--appendonly", "no"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -39,7 +39,7 @@ services:
       # back to the in-container browser. See README.md (Usage → Join a Google Meet).
       - GOOGLE_CHROME_CDP_URL=${GOOGLE_CHROME_CDP_URL-http://chrome-cdp:9223}
     ports:
-      - "3008:3000"
+      - "3010:3000"
     volumes:
       - .:/usr/src/app
       - ./.chrome:/usr/src/app/.chrome
@@ -85,8 +85,8 @@ services:
     volumes:
       - /home/abhinand/meeting-bot-minio/data:/data
     ports:
-      - "9005:9000"
-      - "9006:9001"
+      - "9010:9000"
+      - "9011:9001"
 
 volumes:
   cache:
