@@ -1,23 +1,4 @@
 services:
-  manager:
-    build:
-      context: ./manager
-      dockerfile: Dockerfile
-    container_name: test-meeting-bot-manager
-    restart: unless-stopped
-    ports:
-      - "4000:4000"
-    environment:
-      - PORT=4000
-      - DOCKER_NETWORK=test-meeting-bot_default
-      - WORKER_IMAGE=test-meeting-bot-meeting-bot
-      - CHROME_IMAGE=test-meeting-bot-chrome-cdp
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./.env:/manager/.env:ro
-    networks:
-      - default
-
   redis:
     image: redis:7-alpine
     # Host-published port is configurable via REDIS_PORT_HOST (default 6379) so it

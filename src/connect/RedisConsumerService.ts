@@ -154,6 +154,9 @@ export class RedisConsumerService {
           tempFileId,
           logger,
           meetingParams.url,
+          meetingParams.branchName,
+          meetingParams.batchName,
+          meetingParams.recordingFileName,
         );
 
         // Create and join the meeting
